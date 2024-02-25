@@ -1,0 +1,448 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+
+body {
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #5a5af3;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+}
+
+.user-info {
+    font-size: 16px;
+}
+
+.user-actions {
+    display: flex;
+    align-items: center;
+}
+
+#logoutButton {
+    background-color: red; /* New background color */
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    margin-right: 20px;
+    font-size: 14px;
+    padding: 10px 20px; /* Add padding to make the button larger */
+    text-decoration: none; /* Remove underline */
+    display: inline-block; /* Make it a block element for padding to work */
+    border-radius: 25px; /* Add rounded corners */
+    transition: background-color 0.3s; /* Add a smooth transition for background color */
+}
+
+#logoutButton:hover {
+    background-color: #fff; /* Darken the background color on hover */
+    color: red;
+    font-weight: 600;
+}
+
+
+.user-profile-icon img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%; /* Makes the image round */
+    object-fit: cover; /* Scales the image while maintaining aspect ratio */
+    margin-left: 10px; /* Adjust the spacing from the button */
+}
+
+#quizForm {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    max-width: 30%;
+}
+
+/* Style for the form elements */
+#topic, #difficulty, #numQuestions {
+    margin: 5px;
+}
+
+/* Style for the buttons */
+#fetchQuiz, #homepageButton {
+    margin: 10px;
+}
+
+form {
+    margin: 20px;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 15px;
+    width: 50%;
+    display: inline-block;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: #333;
+    margin-top: 10px;
+}
+
+input[type="text"],
+select,
+input[type="number"] {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ddd;
+    border-radius: 15px;
+}
+
+select {
+    background-color: #f7f7f7;
+}
+
+button {
+    background-color: #5a5af3;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 35px;
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: #3579e7;
+}
+
+/* Additional styling for the number input field */
+input[type="number"] {
+    width: calc(100% - 22px); /* Adjust width to accommodate the up/down arrows */
+}
+
+#quizOutput {
+    margin: 20px auto; /* Add 'auto' to horizontally center it */
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: 70%;
+    display: block; /* Change 'inline-block' to 'block' for full width */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Styling for the quizQuestions div header */
+#quizOutput .quiz-header {
+    background-color: #4285f4;
+    color: white;
+    padding: 10px;
+    font-size: 24px;
+    text-align: center;
+    border-radius: 20px;
+    max-width: 30%;
+    margin: 0 auto;
+}
+
+/* Styling for the timer in quizQuestions div */
+#quizOutput .quiz-timer {
+    background-color: #f1f1f1;
+    color: #4285f4;
+    padding: 5px;
+    font-size: 18px;
+    text-align: center;
+    border-radius: 20px;
+    margin-bottom: 12px !important; 
+    margin-top: 12px !important; 
+    max-width: 30%;
+    margin: 0 auto;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+}
+
+.difficultyLevel {
+    background-color: #f1f1f1;
+    color: #4285f4;
+    padding: 5px;
+    font-size: 18px;
+    text-align: center;
+    border-radius: 20px;
+    margin-bottom: 12px !important; 
+    margin-top: 12px !important; 
+    max-width: 30%;
+    margin: 0 auto;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Styling for Font Awesome icons */
+#quizOutput .fa {
+    margin-right: 5px; /* Add some spacing between the icon and text */
+}
+
+/* Style for the questions segment */
+.question {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 25px;
+    padding: 15px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    width: 70%;
+    margin: 0 auto; /* Center the question div horizontally */
+    display: flex; /* Use flexbox for centering vertically */
+    flex-direction: column; /* Stack child elements vertically */
+    justify-content: center; /* Center child elements vertically */
+    align-items: flex-start; /* Center child elements horizontally */
+    margin-bottom: 20px;
+}
+
+.question h2 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.question ul {
+    list-style-type: none;
+    padding: 0;
+    justify-content: left;
+    align-items: left;
+}
+
+.question li {
+    margin: 10px 0;
+    font-size: 16px;
+    background-color: #5a5af3;
+    padding: 5px 10px; /* Adjust the padding to control width */
+    border-radius: 30px;
+    display: flex;
+    align-items: center;
+    width: auto; /* Control the width of the options */
+    max-height: 25px; /* Control the maximum height of the options */
+    /* color: red; */
+}
+
+
+.question input[type="radio"] {
+    margin-right: 10px;
+    vertical-align: middle;
+    display: inline;
+    -webkit-appearance: none; /* Remove default styles for WebKit browsers */
+    -moz-appearance: none; /* Remove default styles for Mozilla Firefox */
+    appearance: none; /* Remove default styles for other browsers */
+    width: 20px; /* Set the width of the custom radio button */
+    height: 20px; /* Set the height of the custom radio button */
+    background-color: #fff; /* Set the background color of the custom radio button */
+    border: 2px solid #fff;; /* Set the border of the custom radio button */
+    border-radius: 50%; /* Create a circular shape for the custom radio button */
+}
+
+.question input[type="radio"]:checked {
+    background-color: #42f498; /* Change the background color when the radio button is checked */
+    border-color: #42f498; /* Change the border color when the radio button is checked */
+}
+
+.question label {
+    vertical-align: middle;
+    display: inline; /* Display label to the left */
+    padding: 5px 10px; /* Add padding to the label */
+    border-radius: 15px; /* Add rounded corners to the label border */
+    color: #fff;
+    font-weight: 500;
+}
+
+.question p {
+    margin: 5px 0;
+    font-weight: bold;
+}
+
+.question p.correct {
+    color: green;
+}
+
+.question p.incorrect {
+    color: red;
+}
+
+.correct-answer {
+    color: green;
+}
+
+#buttonsContainer {
+    display: flex;
+    justify-content: center;
+    gap: 10px; /* Adjust this value to add space between buttons */
+}
+
+#buttonsContainer button {
+    /* Your styles for buttons here */
+    background-color: #4285f4;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 15px;
+    margin: 10px 0;
+    text-align: center;
+}
+
+#submitQuiz {
+    background-color: #4CAF50 !important;
+}
+
+#resetQuiz {
+    background-color: #f44336 !important;
+
+}
+
+#goToHomepage {
+    background-color: #4285f4 !important;
+}
+
+.fas {
+    font-size: 1.2em;
+    margin-right: 5px;
+    vertical-align: middle;
+}
+
+#quizOutput, #submitQuiz {
+    display: none;
+}
+
+#results {
+    display: none;
+    text-align: center;
+    background-color: #7baaf7; /* Light blue */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    color: #fff;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40%;
+}
+
+#result-container {
+    width: 40%;
+    background-color: #c6dafc; /* Lighter blue */
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    text-align: center;
+}
+
+table {
+    width: 60%;
+    margin: 0 auto;
+}
+
+th, td {
+    padding: 12px;
+    text-align: center;
+    border-bottom: 1px solid #4285f4; /* Dark blue */
+}
+
+th {
+    background-color: #3367d6; /* Deep blue */
+    color: #fff;
+}
+
+.icon {
+    font-size: 18px;
+}
+
+.topic {
+    font-weight: bold;
+}
+
+#analyzeAnswers {
+    background-color: #4285f4;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 35px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: medium;
+    margin-top: 20px;
+}
+
+#analyzeAnswers:hover {
+    background-color: #356ac1;
+}
+
+/* Your existing CSS */
+
+/* Responsive Styles */
+@media screen and (max-width: 768px) {
+    header {
+        flex-direction: column; /* Stack elements vertically on smaller screens */
+        text-align: center;
+    }
+
+    .user-info, .user-actions {
+        margin: 10px 0;
+    }
+
+    .user-profile-icon img {
+        width: 40px;
+        height: 40px;
+    }
+
+    #logoutButton {
+        margin-right: 0;
+    }
+
+    #quizForm {
+        max-width: 90%; /* Adjust form width for medium screens */
+    }
+
+    #quizOutput {
+        max-width: 90%; /* Adjust quiz output width for medium screens */
+    }
+
+    #result-container {
+        max-width: 90%; /* Adjust results width for medium screens */
+    }
+}
+
+@media screen and (max-width: 576px) {
+    .user-info {
+        font-size: 14px;
+    }
+
+    .user-profile-icon img {
+        width: 30px;
+        height: 30px;
+    }
+
+    #logoutButton {
+        padding: 8px 16px;
+        font-size: 12px;
+    }
+
+    #quizForm {
+        max-width: 100%; /* Full width on smaller screens */
+    }
+
+    #quizOutput {
+        max-width: 100%; /* Full width on smaller screens */
+    }
+
+    #result-container {
+        max-width: 100%; /* Full width on smaller screens */
+    }
+}
+
+/* Your existing CSS */
