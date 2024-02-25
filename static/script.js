@@ -1,5 +1,4 @@
 const apiKey = "iQDqOadaA3bsTW1Z6TXLYjJ0vLWOVLc1H4eQNLag";
-// const apiUrl = `https://quizapi.io/api/v1/questions?apiKey=${apiKey}&difficulty=${difficulty}&limit=${numQuestions}&tags=${topic}`;
 
 let quizData = [];
 
