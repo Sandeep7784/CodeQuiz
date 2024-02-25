@@ -7,7 +7,7 @@ class UserBaseSchema(BaseModel):
     email: str
     username: str
     role: str | None = None
-    pastQuiz: list 
+    pastQuiz: list | None = None
     created_at: datetime | None = None
     updated_at: datetime | None = None
 
