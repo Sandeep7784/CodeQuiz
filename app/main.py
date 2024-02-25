@@ -44,8 +44,9 @@ async def get_user_data(access_token):
 async def read_item(request: Request, access_token: str = Cookie(None)):
     # print(request)
     user_data = await get_user_data(access_token)
-    print(user_data)
-    return templates.TemplateResponse("index.html", {"request": request})
+    # print(user_data)
+    return templates.TemplateResponse("index.html", {"request": request, "user_data": user_data['user']})
+
 
 @app.get("/login", response_class=HTMLResponse)
 async def read_item(request: Request):
