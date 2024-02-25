@@ -85,22 +85,16 @@
         const cookieArray = cookieString.split(';');
         console.log(cookieArray);
 
-        let myData = null;
+        let accessToken = null;
 
         // Loop through each cookie to find the one labeled "my_data"
         cookieArray.forEach(cookie => {
             const [key, value] = cookie.trim().split('=');
             if (key === 'access_token') {
-                myData = decodeURIComponent(value);
+                accessToken = decodeURIComponent(value);
             }
         });
-
-        // 3. Decode the data (if necessary)
-        // (e.g., if the data was encoded using encodeURIComponent)
-
-        // 4. Retrieve "my_data"
-        // console.log("My Data:", myData);
-        return myData;
+        return accessToken;
       }
 
   document.getElementById('loginForm').addEventListener('submit', function(event) {

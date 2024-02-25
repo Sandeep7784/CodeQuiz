@@ -1,5 +1,4 @@
 const apiKey = "iQDqOadaA3bsTW1Z6TXLYjJ0vLWOVLc1H4eQNLag";
-// const apiUrl = `https://quizapi.io/api/v1/questions?apiKey=${apiKey}&difficulty=${difficulty}&limit=${numQuestions}&tags=${topic}`;
 
 let quizData = [];
 
@@ -234,33 +233,9 @@ function displayResultsPage(correctCount, totalQuestions) {
   document.getElementById("resetQuiz").style.display = "none";
 }
 
-
-// function getCorrectAnswer(questionData, index) {
-//     const correctAnswers = [];
-//     for (const key in questionData.correct_answers) {
-//         if (questionData.correct_answers[key] === "true") {
-//             correctAnswers.push(key);
-//         }
-//     }
-//     const answerIndex = key.charCodeAt(6) - 'a'.charCodeAt(0);
-//     return questionData.answers[`answer_${String.fromCharCode(97 + answerIndex)}`];
-// }
-
 function redirectToHomepage() {
   window.location.href = 'index.html';
 }
-
-// document.getElementById("goToHomepage").addEventListener("click", function () {
-//   // Clear the quiz questions and show the original form
-//   document.getElementById("quizOutput").innerHTML = "";
-//   document.getElementById("quizOutput").style.display = "none";
-//   document.getElementById("quizForm").style.display = "block";
-//   document.getElementById("submitQuiz").style.display = "none";
-//   document.getElementById("results").innerHTML = "";
-//   document.getElementById("goToHomepage").style.display = "";
-//   document.getElementById("resetQuiz").style.display = "none";
-//   document.getElementById("quizForm").reset();
-// });
 
 let timerInterval; // Variable to store the timer interval
 let startTime; // Variable to store the timestamp when the timer started
@@ -293,19 +268,3 @@ function formatTime(milliseconds) {
     .padStart(2, "0")}`;
 }
 
-// function getCookie(name) {
-//   var cookieValue = null;
-//   if (document.cookie && document.cookie !== '') {
-//       var cookies = document.cookie.split(';');
-//       for (var i = 0; i < cookies.length; i++) {
-//           var cookie = cookies[i].trim();
-//           // Check if the cookie name matches
-//           if (cookie.substring(0, name.length + 1) === (name + '=')) {
-//               // Extract and decode the cookie value
-//               cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-//               break;
-//           }
-//       }
-//   }
-//   return cookieValue;
-// }
