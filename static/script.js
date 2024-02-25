@@ -202,6 +202,7 @@ document.getElementById("submitQuiz").addEventListener("click", function () {
     });
 
     displayResultsPage(correctCount, totalQuestions);
+    // console.log("line 205");
   }
 });
 
