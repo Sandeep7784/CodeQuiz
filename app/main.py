@@ -39,13 +39,18 @@ async def get_user_data(access_token):
         else:
             # Handle the error, for example, raising an exception
             raise Exception(f"Failed to fetch user data: {response.text}")
+
+@app.get("/quiz-home", response_class=HTMLResponse)
+async def read_item(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
         
 @app.get("/quiz", response_class=HTMLResponse)
 async def read_item(request: Request, access_token: str = Cookie(None)):
     # print(request)
     user_data = await get_user_data(access_token)
-    print(user_data)
-    return templates.TemplateResponse("index.html", {"request": request})
+    # print(user_data)
+    return templates.TemplateResponse("index.html", {"request": request, "user_data": user_data['user']})
+
 
 @app.get("/login", response_class=HTMLResponse)
 async def read_item(request: Request):
