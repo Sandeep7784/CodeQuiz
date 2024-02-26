@@ -24,6 +24,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+class UpdatePastQuizRequest(BaseModel):
+    Topic: str
+    Difficulty: str
+    TimeTaken: str
+    Score: str
+    Accuracy: str
+
 templates = Jinja2Templates(directory="templates")
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
