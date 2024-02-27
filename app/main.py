@@ -1,8 +1,10 @@
-from fastapi import Cookie, FastAPI, Request, requests
+import datetime
+from fastapi import Cookie, FastAPI, HTTPException, Header, Request, requests
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
+from pydantic import BaseModel
 import httpx
 
 from app.config import settings
@@ -18,11 +20,18 @@ origins = [
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+class UpdatePastQuizRequest(BaseModel):
+    Topic: str
+    Difficulty: str
+    TimeTaken: str
+    Score: str
+    Accuracy: str
 
 templates = Jinja2Templates(directory="templates")
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -55,6 +64,19 @@ async def read_item(request: Request):
 @app.get("/signup", response_class=HTMLResponse)
 async def read_item(request: Request):
     return templates.TemplateResponse("signup.html", {"request": request})
+
+@app.put("/users/{user_id}")
+async def update_past_quiz(user_id: str, request_data: UpdatePastQuizRequest):
+    if user_id not in users_data:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    past_quiz_data = request_data.dict()
+
+    # Update user's pastQuiz data
+    users_data[user_id]["pastQuiz"].append(past_quiz_data)
+    users_data[user_id]["updated_at"] = datetime.utcnow()
+
+    return {"message": "Past quiz updated successfully"}
 
 @app.get("/api/healthchecker")
 def root():
