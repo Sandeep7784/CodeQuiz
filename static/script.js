@@ -200,7 +200,6 @@ document.getElementById("submitQuiz").addEventListener("click", function () {
         correctCount++;
       }
     });
-    console.log("line 205");
     displayResultsPage(correctCount, totalQuestions);
     
   }
@@ -235,7 +234,6 @@ function displayResultsPage(correctCount, totalQuestions) {
     Score: resultsText.textContent,
     // Accuracy: accuracy,
   };
-  console.log("Line 238, phenchod");
   // Hide the quiz questions
   document.getElementById("quizOutput").style.display = "none";
   document.getElementById("submitQuiz").style.display = "none";

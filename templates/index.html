@@ -147,11 +147,11 @@
     <script src="{{ url_for('static', path='/script.js')}}"></script>
     <script>
       function getDataForm() {
-        topicName = document.getElementById("quizTopicTb").value;
-        difficulty = document.getElementById("quizDifficultyTb").value;
-        timeTaken = document.getElementById("timeTaken").value;
-        score = document.getElementById("resultsText").value;
-        accuracy = document.getElementById("resultsAccuracy").value;
+        topicName = document.getElementById("quizTopicTb").textContent;
+        difficulty = document.getElementById("quizDifficultyTb").textContent;
+        timeTaken = document.getElementById("timeTaken").textContent;
+        score = document.getElementById("resultsText").textContent;
+        accuracy = document.getElementById("resultsAccuracy").textContent;
         const data = {
           Topic: topicName,
           Difficulty: difficulty,
@@ -165,35 +165,34 @@
         let form_data = getDataForm();
 
         // Wait until the topic is defined in the form data
-        // while (form_data["Topic"] === undefined) {
-        //   console.log("Waiting for form data to be defined...");
-        //   await new Promise((resolve) => setTimeout(resolve, 1000));
-        //   form_data = getDataForm(); // Re-fetch form data
-        // }
+        while (form_data["Topic"] === undefined) {
+          await new Promise((resolve) => setTimeout(resolve, 1000));
+          form_data = getDataForm(); // Re-fetch form data
+        }
         // console.log("line 180");
-        console.log(form_data);
+        // console.log(form_data);
         // console.log(mail);
         const userId = mail; // Assuming this is the user's ID
-        // const accessToken = getAccessTokenFromCookie();
+        const accessToken = getAccessTokenFromCookie();
 
-        // try {
-        //     const response = await fetch(`http://localhost:8000/users/${userId}`, {
-        //         method: 'PUT',
-        //         headers: {
-        //             'Content-Type': 'application/json',
-        //             // 'Authorization': `Bearer ${accessToken}`
-        //         },
-        //         body: JSON.stringify(form_data)
-        //     });
+        try {
+            const response = await fetch(`http://localhost:8000/users/${userId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    // 'Authorization': `Bearer ${accessToken}`
+                },
+                body: JSON.stringify(form_data)
+            });
 
-        //     if (!response.ok) {
-        //         throw new Error('Failed to update pastQuiz');
-        //     }
+            if (!response.ok) {
+                throw new Error('Failed to update pastQuiz');
+            }
 
-        //     console.log('Past quiz updated successfully');
-        // } catch (error) {
-        //     console.error('Error updating pastQuiz:', error.message);
-        // }
+            console.log('Past quiz updated successfully');
+        } catch (error) {
+            console.error('Error updating pastQuiz:', error.message);
+        }
       }
     </script>
     <script
