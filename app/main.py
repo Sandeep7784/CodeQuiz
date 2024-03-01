@@ -65,18 +65,28 @@ async def read_item(request: Request):
 async def read_item(request: Request):
     return templates.TemplateResponse("signup.html", {"request": request})
 
+# @app.put("/users/{user_id}")
+# async def update_past_quiz(user_id: str, request_data: UpdatePastQuizRequest):
+#     if user_id not in users_data:
+#         raise HTTPException(status_code=404, detail="User not found")
+
+#     # past_quiz_data = request_data.dict()
+
+#     # Update user's pastQuiz data
+#     users_data[user_id]["pastQuiz"].append(past_quiz_data)
+#     users_data[user_id]["updated_at"] = datetime.utcnow()
+
+#     return {"message": "Past quiz updated successfully"}
+
 @app.put("/users/{user_id}")
-async def update_past_quiz(user_id: str, request_data: UpdatePastQuizRequest):
-    if user_id not in users_data:
-        raise HTTPException(status_code=404, detail="User not found")
-
-    past_quiz_data = request_data.dict()
-
-    # Update user's pastQuiz data
-    users_data[user_id]["pastQuiz"].append(past_quiz_data)
-    users_data[user_id]["updated_at"] = datetime.utcnow()
-
+async def update_user(user_id: str, authorization: str = Header(...), data: dict = {}):
+    user_data = await get_user_data(authorization)
+    # print(user_data)
+    
+    user_data['user']['pastQuiz'].append(data)
+    # update_user_data(access_token, user_data)
     return {"message": "Past quiz updated successfully"}
+
 
 @app.get("/api/healthchecker")
 def root():
