@@ -146,6 +146,23 @@
 
     <script src="{{ url_for('static', path='/script.js')}}"></script>
     <script>
+      function getAccessTokenFromCookie() {
+        const cookieString = document.cookie;
+        const cookieArray = cookieString.split(";");
+        // console.log(cookieArray);
+
+        let accessToken = null;
+
+        // Loop through each cookie to find the one labeled "my_data"
+        cookieArray.forEach((cookie) => {
+          const [key, value] = cookie.trim().split("=");
+          if (key === "access_token") {
+            accessToken = decodeURIComponent(value);
+          }
+        });
+        return accessToken;
+      }
+
       function getDataForm() {
         topicName = document.getElementById("quizTopicTb").textContent;
         difficulty = document.getElementById("quizDifficultyTb").textContent;
@@ -176,22 +193,25 @@
         const accessToken = getAccessTokenFromCookie();
 
         try {
-            const response = await fetch(`http://localhost:8000/users/${userId}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    // 'Authorization': `Bearer ${accessToken}`
-                },
-                body: JSON.stringify(form_data)
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to update pastQuiz');
+          const response = await fetch(
+            `http://localhost:8000/users/${userId}`,
+            {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+                'Authorization': `${accessToken}`
+              },
+              body: JSON.stringify(form_data),
             }
+          );
 
-            console.log('Past quiz updated successfully');
+          if (!response.ok) {
+            throw new Error("Failed to update pastQuiz");
+          }
+
+          console.log("Past quiz updated successfully");
         } catch (error) {
-            console.error('Error updating pastQuiz:', error.message);
+          console.error("Error updating pastQuiz:", error.message);
         }
       }
     </script>
