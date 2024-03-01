@@ -21,7 +21,7 @@ document.getElementById("fetchQuiz").addEventListener("click", function () {
 
   quizForm.style.display = "none"; // Hide the form
   quizOutput.style.display = "block"; // Show the quiz questions
-  submitButton.style.display = "none"; // Show the submit button
+  // submitButton.style.display = "none"; // Show the submit button
   goToHomepage.style.display = "none"; // Show the homepage button
 });
 
@@ -200,9 +200,9 @@ document.getElementById("submitQuiz").addEventListener("click", function () {
         correctCount++;
       }
     });
-
+    console.log("line 205");
     displayResultsPage(correctCount, totalQuestions);
-    // console.log("line 205");
+    
   }
 });
 
@@ -227,6 +227,15 @@ function displayResultsPage(correctCount, totalQuestions) {
   // Display the time taken in the results div
   document.getElementById("timeTaken").textContent = formattedTime;
   document.getElementById("resultsAccuracy").textContent = `${accuracy.toFixed(2)}%`;
+
+  const data = {
+    Topic: topicName,
+    Difficulty: difficulty,
+    TimeTaken: formattedTime,
+    Score: resultsText.textContent,
+    // Accuracy: accuracy,
+  };
+  console.log("Line 238, phenchod");
   // Hide the quiz questions
   document.getElementById("quizOutput").style.display = "none";
   document.getElementById("submitQuiz").style.display = "none";

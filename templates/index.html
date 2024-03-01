@@ -99,7 +99,7 @@
       <div id="buttonsContainer">
         <button id="submitQuiz">
           <i class="fas fa-check"></i> Submit Quiz
-      </button>          
+        </button>
         <button id="resetQuiz"><i class="fas fa-undo"></i> Reset</button>
         <button id="goToHomepage" onclick="window.location.href = 'quiz'">
           <i class="fas fa-home"></i> Homepage
@@ -136,56 +136,65 @@
       <button id="analyzeAnswers">
         <i class="fas fa-tasks"></i> Analyze Answers
       </button>
-      <button id="submitAnswers"  onclick="submitData('{{ user_data.email }}')">
+      <button id="submitAnswers" onclick="submitData('{{ user_data.email }}')">
         <i class="fas fa-tasks"></i> Submit Answers
       </button>
-        <div class="container">
-            <h2 style="color: #333">Presvious Stats</h2>
-        </div>
+      <div class="container">
+        <h2 style="color: #333">Presvious Stats</h2>
+      </div>
     </div>
 
     <script src="{{ url_for('static', path='/script.js')}}"></script>
     <script>
-      async function submitData(mail) {
+      function getDataForm() {
         topicName = document.getElementById("quizTopicTb").value;
         difficulty = document.getElementById("quizDifficultyTb").value;
         timeTaken = document.getElementById("timeTaken").value;
         score = document.getElementById("resultsText").value;
         accuracy = document.getElementById("resultsAccuracy").value;
-        
         const data = {
-            "Topic": topicName,
-            "Difficulty": difficulty,
-            "TimeTaken": timeTaken,
-            "Score": score,
-            "Accuracy": accuracy
+          Topic: topicName,
+          Difficulty: difficulty,
+          TimeTaken: timeTaken,
+          Score: score,
+          Accuracy: accuracy,
         };
-        console.log("line 180");
-        console.log(topicName);
+        return data;
+      }
+      async function submitData(mail) {
+        let form_data = getDataForm();
+
+        // Wait until the topic is defined in the form data
+        // while (form_data["Topic"] === undefined) {
+        //   console.log("Waiting for form data to be defined...");
+        //   await new Promise((resolve) => setTimeout(resolve, 1000));
+        //   form_data = getDataForm(); // Re-fetch form data
+        // }
+        // console.log("line 180");
+        console.log(form_data);
         // console.log(mail);
         const userId = mail; // Assuming this is the user's ID
         // const accessToken = getAccessTokenFromCookie();
 
-        try {
-            const response = await fetch(`http://localhost:8000/users/${userId}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    // 'Authorization': `Bearer ${accessToken}`
-                },
-                body: JSON.stringify(data)
-            });
+        // try {
+        //     const response = await fetch(`http://localhost:8000/users/${userId}`, {
+        //         method: 'PUT',
+        //         headers: {
+        //             'Content-Type': 'application/json',
+        //             // 'Authorization': `Bearer ${accessToken}`
+        //         },
+        //         body: JSON.stringify(form_data)
+        //     });
 
-            if (!response.ok) {
-                throw new Error('Failed to update pastQuiz');
-            }
+        //     if (!response.ok) {
+        //         throw new Error('Failed to update pastQuiz');
+        //     }
 
-            console.log('Past quiz updated successfully');
-        } catch (error) {
-            console.error('Error updating pastQuiz:', error.message);
-        }
-    }
-
+        //     console.log('Past quiz updated successfully');
+        // } catch (error) {
+        //     console.error('Error updating pastQuiz:', error.message);
+        // }
+      }
     </script>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
