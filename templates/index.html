@@ -32,7 +32,7 @@
         <button
           type="button"
           class="btn btn-danger btn-block mb-2"
-          onclick="window.location.href = 'login'"
+          onclick="Logout()"
         >
           Logout
         </button>
@@ -170,6 +170,32 @@
 
     <script src="{{ url_for('static', path='/script.js')}}"></script>
     <script>
+      function Logout() {
+        const accessToken = getAccessTokenFromCookie();
+        // console.log(accessToken);
+        fetch("/api/auth/logout", {
+          method: "GET", // Use GET method for logout
+          headers: {
+            "Content-Type": "application/json",
+            Authorize: `${accessToken}`,
+          },
+        })
+          .then((response) => {
+            if (response.ok) {
+              // Logout successful, clear access token cookie
+              // Redirect to login page
+              window.location.href = "/login";
+            } else {
+              // Logout failed, handle error
+              console.error("Logout failed:", response.statusText);
+            }
+          })
+          .catch((error) => {
+            // Network error or other issues
+            console.error("Error:", error);
+          });
+      }
+
       function getAccessTokenFromCookie() {
         const cookieString = document.cookie;
         const cookieArray = cookieString.split(";");
