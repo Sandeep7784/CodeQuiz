@@ -92,7 +92,7 @@ async def update_user(authorization: str = Header(...), data: dict = {}):
     # user_data['user']['updated_at'] = datetime.datetime.utcnow()
     id = user_data['user']['id']   
     query = { "_id": ObjectId(id) }
-    newvalues = { "$push": { "pastQuiz": user_data['user']['pastQuiz'] } }
+    newvalues = { "$push": { "pastQuiz": data } }
     result = db.users.update_one(query, newvalues)
     # if result.acknowledged:
     #     print("Update operation acknowledged")
