@@ -133,12 +133,36 @@
           <td id="resultsAccuracy"></td>
         </tr>
       </table>
-      <button id="analyzeAnswers">
-        <i class="fas fa-tasks"></i> Analyze Answers
-      </button>
-      <button id="submitAnswers" onclick="submitData('{{ user_data.email }}')">
-        <i class="fas fa-tasks"></i> Submit Answers
-      </button>
+      <div style="margin-bottom: 20px">
+        <button class="button" id="analyzeAnswers">
+          <i class="fas fa-tasks"></i> Analyze Answers
+        </button>
+      </div>
+
+      <div style="margin-bottom: 20px">
+        <p>Please analyze your answers before submitting the response.</p>
+      </div>
+
+      <div>
+        <button
+          class="button"
+          id="submitAnswers"
+          onclick="submitData('{{ user_data.email }}')"
+          style="
+            background-color: #4caf50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 35px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: medium;
+          "
+        >
+          <i class="fas fa-check-circle"></i> Submit Result
+        </button>
+      </div>
+
       <div class="container">
         <h2 style="color: #333">Presvious Stats</h2>
       </div>
@@ -199,7 +223,7 @@
               method: "PUT",
               headers: {
                 "Content-Type": "application/json",
-                'Authorization': `${accessToken}`
+                Authorization: `${accessToken}`,
               },
               body: JSON.stringify(form_data),
             }
