@@ -12,7 +12,6 @@ import pymongo
 from app.config import settings
 from app.routers import auth, user
 from app.database import User
-# from DATABASE_URL 
 from app.config import settings
 
 app = FastAPI()
@@ -54,10 +53,12 @@ async def get_user_data(access_token):
       
 @app.get("/quiz", response_class=HTMLResponse)
 async def read_item(request: Request, access_token: str = Cookie(None)):
-    # print(request)
-    user_data = await get_user_data(access_token)
-    # print(user_data)
-    return templates.TemplateResponse("index.html", {"request": request, "user_data": user_data['user']})
+    try:
+        user_data = await get_user_data(access_token)
+        return templates.TemplateResponse("index.html", {"request": request, "user_data": user_data['user']})
+    except Exception as e:
+        # If an exception occurs (status code 500), redirect to /login
+        return RedirectResponse("/login")
 
 
 @app.get("/login", response_class=HTMLResponse)
@@ -92,7 +93,7 @@ async def update_user(authorization: str = Header(...), data: dict = {}):
     # user_data['user']['updated_at'] = datetime.datetime.utcnow()
     id = user_data['user']['id']   
     query = { "_id": ObjectId(id) }
-    newvalues = { "$push": { "pastQuiz": user_data['user']['pastQuiz'] } }
+    newvalues = { "$push": { "pastQuiz": data } }
     result = db.users.update_one(query, newvalues)
     # if result.acknowledged:
     #     print("Update operation acknowledged")
