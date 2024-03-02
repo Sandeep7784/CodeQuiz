@@ -81,8 +81,8 @@ async def read_item(request: Request):
 
 #     return {"message": "Past quiz updated successfully"}
 
-@app.put("/users/{user_id}")
-async def update_user(user_id: str, authorization: str = Header(...), data: dict = {}):
+@app.put("/update-users-data")
+async def update_user(authorization: str = Header(...), data: dict = {}):
     user_data = await get_user_data(authorization)
     # print(user_data)
     client = pymongo.MongoClient(settings.DATABASE_URL)
@@ -94,12 +94,12 @@ async def update_user(user_id: str, authorization: str = Header(...), data: dict
     query = { "_id": ObjectId(id) }
     newvalues = { "$push": { "pastQuiz": user_data['user']['pastQuiz'] } }
     result = db.users.update_one(query, newvalues)
-    if result.acknowledged:
-        print("Update operation acknowledged")
-    else:
-        print("Update operation not acknowledged")
-    updated_document = db.users.find_one(query)
-    print("Updated document:", updated_document)
+    # if result.acknowledged:
+    #     print("Update operation acknowledged")
+    # else:
+    #     print("Update operation not acknowledged")
+    # updated_document = db.users.find_one(query)
+    # print("Updated document:", updated_document)
     # update_user_data(access_token, user_data)
     # print(user_data)
     # print(db)
