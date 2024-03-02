@@ -1,4 +1,5 @@
 import datetime
+from bson import ObjectId
 from fastapi import Cookie, FastAPI, HTTPException, Header, Request, requests
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.templating import Jinja2Templates
@@ -6,11 +7,13 @@ from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 import httpx
+import pymongo
 
 from app.config import settings
 from app.routers import auth, user
 from app.database import User
-
+# from DATABASE_URL 
+from app.config import settings
 
 app = FastAPI()
 
@@ -82,10 +85,25 @@ async def read_item(request: Request):
 async def update_user(user_id: str, authorization: str = Header(...), data: dict = {}):
     user_data = await get_user_data(authorization)
     # print(user_data)
-    
+    client = pymongo.MongoClient(settings.DATABASE_URL)
+    db = client.get_database(settings.MONGO_INITDB_DATABASE)
+
     user_data['user']['pastQuiz'].append(data)
+    # user_data['user']['updated_at'] = datetime.datetime.utcnow()
+    id = user_data['user']['id']   
+    query = { "_id": ObjectId(id) }
+    newvalues = { "$push": { "pastQuiz": user_data['user']['pastQuiz'] } }
+    result = db.users.update_one(query, newvalues)
+    if result.acknowledged:
+        print("Update operation acknowledged")
+    else:
+        print("Update operation not acknowledged")
+    updated_document = db.users.find_one(query)
+    print("Updated document:", updated_document)
     # update_user_data(access_token, user_data)
-    return {"message": "Past quiz updated successfully"}
+    # print(user_data)
+    # print(db)
+    # return {"message": "Past quiz updated successfully"}
 
 
 @app.get("/api/healthchecker")
