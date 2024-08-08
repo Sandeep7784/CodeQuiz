@@ -24,26 +24,29 @@
     <title>Quiz Web App</title>
   </head>
   <body>
+    
     <header>
       <div class="user-info">
-        <p>Hello, <span id="username">{{user_data.name}}</span></p>
-      </div>
+        <p style="font-size: 30px; font-weight: 600; margin: 0;">
+            Hey, <span id="username">{{user_data.name}}</span>
+        </p>
+    </div>
       <div class="user-actions">
-        <button
-          type="button"
-          class="btn btn-danger btn-block mb-2"
-          onclick="Logout()"
-        >
-          Logout
-        </button>
-        <div class="user-profile-icon">
-          <img
-            src="{{ url_for('static', path='/lion.jpg') }}"
-            alt="User Profile"
-          />
-        </div>
+          <button id="homepageButton" onclick="window.location.href = '/quiz'" style="border-radius: 12px; background-color: #17a2b8; color: white; border: none; padding: 10px 15px; margin-right: 10px; display: flex; align-items: center;">
+              <i class="fa fa-home" style="margin-right: 5px;"></i> Homepage
+          </button>
+          <button id="analyticsButton" onclick="window.location.href = '/analytics'" style="border-radius: 12px; background-color: #28a745; color: white; border: none; padding: 10px 15px; margin-right: 10px; display: flex; align-items: center;">
+              <i class="fa fa-chart-line" style="margin-right: 5px;"></i> Previous Analytics
+          </button>
+          <button type="button" id="logoutButton" onclick="Logout()" style="border-radius: 12px; background-color: #dc3545; color: white; border: none; padding: 10px 15px; display: flex; align-items: center;">
+            <i class="fa fa-sign-out-alt" style="margin-right: 5px;"></i> Logout
+          </button>
+          <div class="user-profile-icon">
+              <img src="{{ url_for('static', path='/lion.jpg') }}" alt="User Profile" />
+          </div>
       </div>
     </header>
+    
 
     <form id="quizForm">
       <label for="topic">Topic:</label>
@@ -78,9 +81,26 @@
         required
       />
 
-      <button type="button" id="fetchQuiz">
+      <button
+        type="button"
+        id="fetchQuiz"
+        style="
+          border-radius: 15px;
+          padding: 10px 20px;
+          border: 2px solid #007bff;
+          background-color: #007bff;
+          color: #fff;
+          font-size: 16px;
+          font-weight: bold;
+          cursor: pointer;
+          transition: background-color 0.3s, border-color 0.3s;
+        "
+        onmouseover="this.style.backgroundColor='#0056b3'; this.style.borderColor='#0056b3';"
+        onmouseout="this.style.backgroundColor='#007bff'; this.style.borderColor='#007bff';"
+      >
         <i class="fas fa-play-circle"></i> Start Quiz
       </button>
+
     </form>
 
     <div id="quizOutput">
