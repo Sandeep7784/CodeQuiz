@@ -24,13 +24,15 @@
     <title>Quiz Web App</title>
   </head>
   <body>
-    
     <header>
-      <div class="user-info">
-        <p style="font-size: 30px; font-weight: 600; margin: 0;">
-            Hey, <span id="username">{{user_data.name}}</span>
-        </p>
-    </div>
+      <div class="user-info" style="display: flex; align-items: center;">
+          <div class="user-profile-icon" style="margin-right: 10px;">
+              <img src="{{ url_for('static', path='/lion.jpg') }}" alt="User Profile" style="width: 50px; height: 50px; border-radius: 50%;"/>
+          </div>
+          <p style="font-size: 22px; font-weight: 600; margin: 0;">
+              Hello, <span id="username">{{user_data.name}}</span>
+          </p>
+      </div>
       <div class="user-actions">
           <button id="homepageButton" onclick="window.location.href = '/quiz'" style="border-radius: 12px; background-color: #17a2b8; color: white; border: none; padding: 10px 15px; margin-right: 10px; display: flex; align-items: center;">
               <i class="fa fa-home" style="margin-right: 5px;"></i> Homepage
@@ -41,13 +43,9 @@
           <button type="button" id="logoutButton" onclick="Logout()" style="border-radius: 12px; background-color: #dc3545; color: white; border: none; padding: 10px 15px; display: flex; align-items: center;">
             <i class="fa fa-sign-out-alt" style="margin-right: 5px;"></i> Logout
           </button>
-          <div class="user-profile-icon">
-              <img src="{{ url_for('static', path='/lion.jpg') }}" alt="User Profile" />
-          </div>
       </div>
     </header>
     
-
     <form id="quizForm">
       <label for="topic">Topic:</label>
       <select id="topic" name="topic" required>
