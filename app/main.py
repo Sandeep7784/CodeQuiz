@@ -102,6 +102,23 @@ async def update_user(authorization: str = Header(...), data: dict = {}):
     else:
         raise HTTPException(status_code=500, detail="Failed to update quiz data")
 
+@app.get("/analytics", response_class=HTMLResponse)
+async def analytics(request: Request, access_token: str = Cookie(None)):
+    try:
+        user_data = await get_user_data(access_token)
+        # Print the entire user_data
+        print("User Data:", user_data)
+        print("User Data - User:", user_data['user'])
+        if user_data['user']['pastQuiz']:
+            print("First Quiz Entry:", user_data['user']['pastQuiz'][0])
+        else:
+            print("No Quiz Data Available")
+        return templates.TemplateResponse("analytics.html", {"request": request, "user_data": user_data['user']})
+    except Exception as e:
+        print("Error:", e)
+        # Handle the error, e.g., redirect to /login or show an error page
+        return RedirectResponse("/login")
+
 
 @app.get("/api/healthchecker")
 def root():

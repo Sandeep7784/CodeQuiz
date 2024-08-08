@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Previous Analytics</title>
+    <link
+        rel="stylesheet"
+        type="text/css"
+        href="{{ url_for('static', path='analytics.css') }}"
+    />
+    <script src="{{ url_for('static', path='analytics.js') }}" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header>
+        <div class="user-info">
+            <p>Hello, <span id="username">{{ user_data.name }}</span></p>
+        </div>
+        <div class="user-actions">
+            <button id="homepageButton" onclick="window.location.href = '/quiz'">
+                Homepage
+            </button>
+            <button
+                id="analyticsButton"
+                onclick="window.location.href = '/analytics'"
+            >
+                Previous Analytics
+            </button>
+            <button id="logoutButton" onclick="Logout()">Logout</button>
+        </div>
+    </header>
+
+    <main>
+        <section class="quiz-cards">
+            <h2>Your Quizzes</h2>
+            <div id="quizCardsContainer" class="cards-container">
+                <!-- Quiz cards will be inserted here by JavaScript -->
+            </div>
+        </section>
+
+        <section class="analytics">
+            <div class="accuracy-cards">
+                <div class="card" id="maxAccuracyCard">
+                    <h3>Maximum Accuracy</h3>
+                    <p id="maxAccuracy">--%</p>
+                </div>
+                <div class="card" id="minAccuracyCard">
+                    <h3>Minimum Accuracy</h3>
+                    <p id="minAccuracy">--%</p>
+                </div>
+            </div>
+
+            <div class="graphs">
+                <canvas id="quizzesPerDayChart"></canvas>
+                <canvas id="topicWiseScoreChart"></canvas>
+            </div>
+        </section>
+    </main>
+
+    <!-- Pass data to script.js -->
+    <script id="data-script" type="application/json">
+        {{ user_data.pastQuiz | tojson | safe }}
+    </script>
+</body>
+</html>
