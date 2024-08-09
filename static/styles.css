@@ -18,7 +18,8 @@ header {
 }
 
 .user-info {
-    font-size: 16px;
+    font-size: 80px !important;
+    font-weight: 700;
 }
 
 .user-actions {
@@ -45,7 +46,6 @@ header {
     color: red;
     font-weight: 600;
 }
-
 
 .user-profile-icon img {
     width: 60px;
@@ -118,7 +118,7 @@ button {
 }
 
 button:hover {
-    background-color: #3579e7;
+    background-color: none;
 }
 
 /* Additional styling for the number input field */

@@ -51,7 +51,7 @@ async def get_user_data(access_token):
             # Handle the error, for example, raising an exception
             raise Exception(f"Failed to fetch user data: {response.text}")
       
-@app.get("/quiz", response_class=HTMLResponse)
+@app.get("/", response_class=HTMLResponse)
 async def read_item(request: Request, access_token: str = Cookie(None)):
     try:
         user_data = await get_user_data(access_token)
@@ -85,6 +85,8 @@ async def read_item(request: Request):
 @app.put("/update-users-data")
 async def update_user(authorization: str = Header(...), data: dict = {}):
     user_data = await get_user_data(authorization)
+    # if not user_data:
+    #     raise HTTPException(status_code=401, detail="Unauthorized")
     # print(user_data)
     client = pymongo.MongoClient(settings.DATABASE_URL)
     db = client.get_database(settings.MONGO_INITDB_DATABASE)
@@ -95,16 +97,27 @@ async def update_user(authorization: str = Header(...), data: dict = {}):
     query = { "_id": ObjectId(id) }
     newvalues = { "$push": { "pastQuiz": data } }
     result = db.users.update_one(query, newvalues)
-    # if result.acknowledged:
-    #     print("Update operation acknowledged")
-    # else:
-    #     print("Update operation not acknowledged")
-    # updated_document = db.users.find_one(query)
-    # print("Updated document:", updated_document)
-    # update_user_data(access_token, user_data)
-    # print(user_data)
-    # print(db)
-    # return {"message": "Past quiz updated successfully"}
+    if result.acknowledged:
+        return {"message": "Quiz data updated successfully"}
+    else:
+        raise HTTPException(status_code=500, detail="Failed to update quiz data")
+
+@app.get("/analytics", response_class=HTMLResponse)
+async def analytics(request: Request, access_token: str = Cookie(None)):
+    try:
+        user_data = await get_user_data(access_token)
+        # Print the entire user_data
+        # print("User Data:", user_data)
+        # print("User Data - User:", user_data['user'])
+        # if user_data['user']['pastQuiz']:
+        #     print("First Quiz Entry:", user_data['user']['pastQuiz'][0])
+        # else:
+        #     print("No Quiz Data Available")
+        return templates.TemplateResponse("analytics.html", {"request": request, "user_data": user_data['user']})
+    except Exception as e:
+        print("Error:", e)
+        # Handle the error, e.g., redirect to /login or show an error page
+        return RedirectResponse("/login")
 
 
 @app.get("/api/healthchecker")

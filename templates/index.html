@@ -25,26 +25,27 @@
   </head>
   <body>
     <header>
-      <div class="user-info">
-        <p>Hello, <span id="username">{{user_data.name}}</span></p>
+      <div class="user-info" style="display: flex; align-items: center;">
+          <div class="user-profile-icon" style="margin-right: 10px;">
+              <img src="{{ url_for('static', path='/lion.jpg') }}" alt="User Profile" style="width: 50px; height: 50px; border-radius: 50%;"/>
+          </div>
+          <p style="font-size: 22px; font-weight: 600; margin: 0;">
+              Hello, <span id="username">{{user_data.name}}</span>
+          </p>
       </div>
       <div class="user-actions">
-        <button
-          type="button"
-          class="btn btn-danger btn-block mb-2"
-          onclick="Logout()"
-        >
-          Logout
-        </button>
-        <div class="user-profile-icon">
-          <img
-            src="{{ url_for('static', path='/lion.jpg') }}"
-            alt="User Profile"
-          />
-        </div>
+          <button id="homepageButton" onclick="window.location.href = '/'" style="border-radius: 12px; background-color: #17a2b8; color: white; border: none; padding: 10px 15px; margin-right: 10px; display: flex; align-items: center;">
+              <i class="fa fa-home" style="margin-right: 5px;"></i> Homepage
+          </button>
+          <button id="analyticsButton" onclick="window.location.href = '/analytics'" style="border-radius: 12px; background-color: #28a745; color: white; border: none; padding: 10px 15px; margin-right: 10px; display: flex; align-items: center;">
+              <i class="fa fa-chart-line" style="margin-right: 5px;"></i> Previous Analytics
+          </button>
+          <button type="button" id="logoutButton" onclick="Logout()" style="border-radius: 12px; background-color: #dc3545; color: white; border: none; padding: 10px 15px; display: flex; align-items: center;">
+            <i class="fa fa-sign-out-alt" style="margin-right: 5px;"></i> Logout
+          </button>
       </div>
     </header>
-
+    
     <form id="quizForm">
       <label for="topic">Topic:</label>
       <select id="topic" name="topic" required>
@@ -78,9 +79,26 @@
         required
       />
 
-      <button type="button" id="fetchQuiz">
+      <button
+        type="button"
+        id="fetchQuiz"
+        style="
+          border-radius: 15px;
+          padding: 10px 20px;
+          border: 2px solid #007bff;
+          background-color: #007bff;
+          color: #fff;
+          font-size: 16px;
+          font-weight: bold;
+          cursor: pointer;
+          transition: background-color 0.3s, border-color 0.3s;
+        "
+        onmouseover="this.style.backgroundColor='#0056b3'; this.style.borderColor='#0056b3';"
+        onmouseout="this.style.backgroundColor='#007bff'; this.style.borderColor='#007bff';"
+      >
         <i class="fas fa-play-circle"></i> Start Quiz
       </button>
+
     </form>
 
     <div id="quizOutput">
@@ -101,78 +119,91 @@
           <i class="fas fa-check"></i> Submit Quiz
         </button>
         <button id="resetQuiz"><i class="fas fa-undo"></i> Reset</button>
-        <button id="goToHomepage" onclick="window.location.href = 'quiz'">
+        <button id="goToHomepage" onclick="window.location.href = '/'">
           <i class="fas fa-home"></i> Homepage
         </button>
       </div>
     </div>
 
-    <div id="results">
-      <h1 style="color: #333">Results</h1>
-      <table>
-        <tr>
-          <th style="background-color: #4285f4; color: #fff">Quiz Topic</th>
-          <td class="topic" id="quizTopicTb">Quiz Topic</td>
-        </tr>
-        <tr>
-          <th style="background-color: #4285f4; color: #fff">
-            Difficulty Level
-          </th>
-          <td id="quizDifficultyTb"></td>
-        </tr>
-        <tr>
-          <th style="background-color: #4285f4; color: #fff">Time Taken</th>
-          <td id="timeTaken"></td>
-        </tr>
-        <tr>
-          <th style="background-color: #4285f4; color: #fff">Score</th>
-          <td id="resultsText"></td>
-        </tr>
-        <tr>
-          <th style="background-color: #4285f4; color: #fff">Accuracy</th>
-          <td id="resultsAccuracy"></td>
-        </tr>
+    <div id="results" style="max-width: 800px; margin: auto; padding: 20px; font-family: Arial, sans-serif;">
+      <h1 style="color: #333; border-bottom: 2px solid #ddd; padding-bottom: 10px; margin-bottom: 20px;">Results</h1>
+      
+      <table style="width: 100%; border-collapse: collapse; color: #333;">
+          <tbody>
+              <tr>
+                  <td style="padding: 12px; border-bottom: 1px solid #ddd; font-weight: bold;">Quiz Topic</td>
+                  <td id="quizTopicTb" style="padding: 12px; border-bottom: 1px solid #ddd;">Quiz Topic Value</td>
+              </tr>
+              <tr>
+                  <td style="padding: 12px; border-bottom: 1px solid #ddd; font-weight: bold;">Difficulty Level</td>
+                  <td id="quizDifficultyTb" style="padding: 12px; border-bottom: 1px solid #ddd;"></td>
+              </tr>
+              <tr>
+                  <td style="padding: 12px; border-bottom: 1px solid #ddd; font-weight: bold;">Time Taken</td>
+                  <td id="timeTaken" style="padding: 12px; border-bottom: 1px solid #ddd;"></td>
+              </tr>
+              <tr>
+                  <td style="padding: 12px; border-bottom: 1px solid #ddd; font-weight: bold;">Score</td>
+                  <td id="resultsText" style="padding: 12px; border-bottom: 1px solid #ddd;"></td>
+              </tr>
+              <tr>
+                  <td style="padding: 12px; font-weight: bold;">Accuracy</td>
+                  <td id="resultsAccuracy" style="padding: 12px;"></td>
+              </tr>
+          </tbody>
       </table>
-      <div style="margin-bottom: 20px">
-        <button class="button" id="analyzeAnswers">
-          <i class="fas fa-tasks"></i> Analyze Answers
-        </button>
+      
+      <div style="margin: 20px 0; text-align: center;">
+          <button class="button" id="analyzeAnswers" style="
+              background-color: #4285F4;
+              border: 5px solid #ddd;
+              color: white;
+              padding: 10px 20px;
+              border-radius: 15px;
+              cursor: pointer;
+              font-size: 16px;
+              font-weight: bold;
+              transition: background-color 0.3s, border-color 0.3s;
+          ">
+              <i class="fas fa-tasks"></i> Analyze Answers
+          </button>
       </div>
-
-      <div style="margin-bottom: 20px">
-        <p>Please analyze your answers before submitting the response.</p>
+  
+      <div style="margin-bottom: 20px; text-align: center;">
+          <p style="font-size: 16px; color: #666;">Please analyze your answers before submitting the response.</p>
       </div>
-
-      <div>
-        <button
-          class="button"
-          id="submitAnswers"
-          onclick="submitData('{{ user_data.email }}')"
-          style="
-            background-color: #4caf50;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 35px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: medium;
-          "
-        >
-          <i class="fas fa-check-circle"></i> Submit Result
-        </button>
+  
+      <div style="text-align: center;">
+          <button
+              class="button"
+              id="submitAnswers"
+              onclick="submitData('{{ user_data.email }}')"
+              style="
+                  background-color: #4caf50;
+                  color: white;
+                  padding: 12px 24px;
+                  border: none;
+                  border-radius: 15px;
+                  cursor: pointer;
+                  font-size: 16px;
+                  font-weight: bold;
+                  transition: background-color 0.3s;
+              "
+          >
+              <i class="fas fa-check-circle"></i> Submit Result
+          </button>
       </div>
-
-      <div class="container">
-        <h2 style="color: #333">Presvious Stats</h2>
+  
+      <div class="container" style="margin-top: 40px;">
+          <h2 style="color: #333; border-bottom: 2px solid #ddd; padding-bottom: 10px;">Previous Stats</h2>
       </div>
-    </div>
+  </div>
+  
 
     <script src="{{ url_for('static', path='/script.js')}}"></script>
     <script>
       function Logout() {
         const accessToken = getAccessTokenFromCookie();
-        // console.log(accessToken);
         fetch("/api/auth/logout", {
           method: "GET", // Use GET method for logout
           headers: {
@@ -255,10 +286,14 @@
             }
           );
 
-          if (!response.ok) {
-            throw new Error("Failed to update pastQuiz");
-          }
+          const result = await response.json();
 
+          if (response.ok) {
+              alert(result.message); // Show success message
+              window.location.href = '/'; // Redirect to /quiz
+          } else {
+              alert(`Error: ${result.detail}`); // Show error message
+          }
           console.log("Past quiz updated successfully");
         } catch (error) {
           console.error("Error updating pastQuiz:", error.message);
