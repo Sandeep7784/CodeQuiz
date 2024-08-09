@@ -242,7 +242,7 @@ function displayResultsPage(correctCount, totalQuestions) {
 }
 
 function redirectToHomepage() {
-  window.location.href = 'index.html';
+  window.location.href = "index.html";
 }
 
 let timerInterval; // Variable to store the timer interval
@@ -275,4 +275,3 @@ function formatTime(milliseconds) {
     .toString()
     .padStart(2, "0")}`;
 }
-
