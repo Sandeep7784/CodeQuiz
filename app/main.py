@@ -51,7 +51,7 @@ async def get_user_data(access_token):
             # Handle the error, for example, raising an exception
             raise Exception(f"Failed to fetch user data: {response.text}")
       
-@app.get("/quiz", response_class=HTMLResponse)
+@app.get("/", response_class=HTMLResponse)
 async def read_item(request: Request, access_token: str = Cookie(None)):
     try:
         user_data = await get_user_data(access_token)
@@ -107,12 +107,12 @@ async def analytics(request: Request, access_token: str = Cookie(None)):
     try:
         user_data = await get_user_data(access_token)
         # Print the entire user_data
-        print("User Data:", user_data)
-        print("User Data - User:", user_data['user'])
-        if user_data['user']['pastQuiz']:
-            print("First Quiz Entry:", user_data['user']['pastQuiz'][0])
-        else:
-            print("No Quiz Data Available")
+        # print("User Data:", user_data)
+        # print("User Data - User:", user_data['user'])
+        # if user_data['user']['pastQuiz']:
+        #     print("First Quiz Entry:", user_data['user']['pastQuiz'][0])
+        # else:
+        #     print("No Quiz Data Available")
         return templates.TemplateResponse("analytics.html", {"request": request, "user_data": user_data['user']})
     except Exception as e:
         print("Error:", e)
