@@ -34,7 +34,7 @@
           </p>
       </div>
       <div class="user-actions">
-          <button id="homepageButton" onclick="window.location.href = '/quiz'" style="border-radius: 12px; background-color: #17a2b8; color: white; border: none; padding: 10px 15px; margin-right: 10px; display: flex; align-items: center;">
+          <button id="homepageButton" onclick="window.location.href = '/'" style="border-radius: 12px; background-color: #17a2b8; color: white; border: none; padding: 10px 15px; margin-right: 10px; display: flex; align-items: center;">
               <i class="fa fa-home" style="margin-right: 5px;"></i> Homepage
           </button>
           <button id="analyticsButton" onclick="window.location.href = '/analytics'" style="border-radius: 12px; background-color: #28a745; color: white; border: none; padding: 10px 15px; margin-right: 10px; display: flex; align-items: center;">
@@ -119,7 +119,7 @@
           <i class="fas fa-check"></i> Submit Quiz
         </button>
         <button id="resetQuiz"><i class="fas fa-undo"></i> Reset</button>
-        <button id="goToHomepage" onclick="window.location.href = 'quiz'">
+        <button id="goToHomepage" onclick="window.location.href = '/'">
           <i class="fas fa-home"></i> Homepage
         </button>
       </div>
@@ -290,7 +290,7 @@
 
           if (response.ok) {
               alert(result.message); // Show success message
-              window.location.href = '/quiz'; // Redirect to /quiz
+              window.location.href = '/'; // Redirect to /quiz
           } else {
               alert(`Error: ${result.detail}`); // Show error message
           }

@@ -66,8 +66,12 @@
                   <p>
                     New to our website, please click on the Sign Up button to
                     register yourself
-                  </p>         
-                  <button type="button" class="btn btn-primary btn-block mb-4" onclick="window.location.href = 'signup'">
+                  </p>
+                  <button
+                    type="button"
+                    class="btn btn-primary btn-block mb-4"
+                    onclick="window.location.href = 'signup'"
+                  >
                     Sign up
                   </button>
                 </div>
@@ -81,66 +85,69 @@
     <script>
       function getAccessTokenFromCookie() {
         const cookieString = document.cookie;
-        const cookieArray = cookieString.split(';');
+        const cookieArray = cookieString.split(";");
         // console.log(cookieArray);
 
         let accessToken = null;
 
         // Loop through each cookie to find the one labeled "my_data"
-        cookieArray.forEach(cookie => {
-            const [key, value] = cookie.trim().split('=');
-            if (key === 'access_token') {
-                accessToken = decodeURIComponent(value);
-            }
+        cookieArray.forEach((cookie) => {
+          const [key, value] = cookie.trim().split("=");
+          if (key === "access_token") {
+            accessToken = decodeURIComponent(value);
+          }
         });
         return accessToken;
       }
 
-  document.getElementById('loginForm').addEventListener('submit', function(event) {
-    event.preventDefault(); // Prevent the default form submission
-    
-    // Collect form data
-    const formData = new FormData(this);
+      document
+        .getElementById("loginForm")
+        .addEventListener("submit", function (event) {
+          event.preventDefault(); // Prevent the default form submission
 
-    // Convert form data to JSON
-    const jsonData = {};
-    formData.forEach((value, key) => {
-      jsonData[key] = value;
-    });
+          // Collect form data
+          const formData = new FormData(this);
 
-    // Send AJAX request
-    fetch('/api/auth/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(jsonData)
-    })
-   .then(response => {
-        // Assuming response is a promise that resolves to data
-        return response.json(); // Assuming response is JSON data, adjust as needed
-    })
-    .then(data => {
-        // Success: Do something with the response data
-        // console.log(data);
-        if (data.status == "success") {
-          console.log("line 122");
-            const accessToken = getAccessTokenFromCookie();
-            // console.log(accessToken);
-            if (accessToken) {
-                window.location.href = '/quiz?access_token=' + encodeURIComponent(accessToken);
-            } else {
-                // Access token not found in cookies
-                console.error("nhi mila");
-                // window.location.href = '/login';
-            }
-        } else {
-            const errorDiv = document.getElementById('errorDiv');
-            errorDiv.textContent = data.detail;
-        }
-    })
-  });
-</script>
+          // Convert form data to JSON
+          const jsonData = {};
+          formData.forEach((value, key) => {
+            jsonData[key] = value;
+          });
+
+          // Send AJAX request
+          fetch("/api/auth/login", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(jsonData),
+          })
+            .then((response) => {
+              // Assuming response is a promise that resolves to data
+              return response.json(); // Assuming response is JSON data, adjust as needed
+            })
+            .then((data) => {
+              // Success: Do something with the response data
+              // console.log(data);
+              if (data.status == "success") {
+                console.log("line 122");
+                const accessToken = getAccessTokenFromCookie();
+                // console.log(accessToken);
+                if (accessToken) {
+                  window.location.href =
+                    "/?access_token=" + encodeURIComponent(accessToken);
+                } else {
+                  // Access token not found in cookies
+                  console.error("nhi mila");
+                  // window.location.href = '/login';
+                }
+              } else {
+                const errorDiv = document.getElementById("errorDiv");
+                errorDiv.textContent = data.detail;
+              }
+            });
+        });
+    </script>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"

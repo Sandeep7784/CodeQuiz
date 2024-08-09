@@ -3,64 +3,108 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Previous Analytics</title>
-    <link
-        rel="stylesheet"
-        type="text/css"
-        href="{{ url_for('static', path='analytics.css') }}"
-    />
-    <script src="{{ url_for('static', path='analytics.js') }}" defer></script>
+    <title>Quiz Analytics</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', path='analytics.css') }}" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <header>
         <div class="user-info">
-            <p>Hello, <span id="username">{{ user_data.name }}</span></p>
+            <p>Welcome, <span id="username">{{ user_data.name }}</span></p>
         </div>
         <div class="user-actions">
-            <button id="homepageButton" onclick="window.location.href = '/quiz'">
-                Homepage
-            </button>
-            <button
-                id="analyticsButton"
-                onclick="window.location.href = '/analytics'"
-            >
-                Previous Analytics
-            </button>
+            <button id="homepageButton" onclick="window.location.href = '/'">Homepage</button>
+            <button id="analyticsButton" onclick="window.location.href = '/analytics'">Analytics</button>
             <button id="logoutButton" onclick="Logout()">Logout</button>
         </div>
     </header>
 
     <main>
-        <section class="quiz-cards">
-            <h2>Your Quizzes</h2>
+        <section class="analytics-summary">
+            <h2>Quiz Analytics Summary</h2>
+            <div class="summary-cards">
+                <div class="summary-card" id="totalQuizzesCard">
+                    <h3>Total Quizzes</h3>
+                    <p id="totalQuizzes">--</p>
+                </div>
+                <div class="summary-card" id="avgAccuracyCard">
+                    <h3>Average Accuracy</h3>
+                    <p id="avgAccuracy">--%</p>
+                </div>
+                <div class="summary-card" id="maxAccuracyCard">
+                    <h3>Highest Accuracy</h3>
+                    <p id="maxAccuracy">--%</p>
+                </div>
+                <div class="summary-card" id="minAccuracyCard">
+                    <h3>Lowest Accuracy</h3>
+                    <p id="minAccuracy">--%</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="charts">
+            <div class="chart-container">
+                <h3>Quizzes Per Day</h3>
+                <canvas id="quizzesPerDayChart"></canvas>
+            </div>
+            <div class="chart-container">
+                <h3>Topic-wise Maximum Score</h3>
+                <canvas id="topicWiseScoreChart"></canvas>
+            </div>
+            <div class="chart-container">
+                <h3>Difficulty Distribution</h3>
+                <canvas id="difficultyDistributionChart"></canvas>
+            </div>
+            <div class="chart-container">
+                <h3>Accuracy Trend</h3>
+                <canvas id="accuracyTrendChart"></canvas>
+            </div>
+        </section>
+
+        <section class="quiz-history">
+            <h2>Quiz History</h2>
             <div id="quizCardsContainer" class="cards-container">
                 <!-- Quiz cards will be inserted here by JavaScript -->
             </div>
         </section>
-
-        <section class="analytics">
-            <div class="accuracy-cards">
-                <div class="card" id="maxAccuracyCard">
-                    <h3>Maximum Accuracy</h3>
-                    <p id="maxAccuracy">--%</p>
-                </div>
-                <div class="card" id="minAccuracyCard">
-                    <h3>Minimum Accuracy</h3>
-                    <p id="minAccuracy">--%</p>
-                </div>
-            </div>
-
-            <div class="graphs">
-                <canvas id="quizzesPerDayChart"></canvas>
-                <canvas id="topicWiseScoreChart"></canvas>
-            </div>
-        </section>
     </main>
 
-    <!-- Pass data to script.js -->
     <script id="data-script" type="application/json">
         {{ user_data.pastQuiz | tojson | safe }}
+    </script>
+    <script src="{{ url_for('static', path='analytics.js') }}"></script>
+    <script>
+        function Logout() {
+            const accessToken = getAccessTokenFromCookie();
+            fetch("/api/auth/logout", {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorize: `${accessToken}`,
+                },
+            })
+            .then((response) => {
+                if (response.ok) {
+                    window.location.href = "/login";
+                } else {
+                    console.error("Logout failed:", response.statusText);
+                }
+            })
+            .catch((error) => {
+                console.error("Error:", error);
+            });
+        }
+
+        function getAccessTokenFromCookie() {
+            const cookies = document.cookie.split(';');
+            for (let cookie of cookies) {
+                const [name, value] = cookie.trim().split('=');
+                if (name === 'access_token') {
+                    return value;
+                }
+            }
+            return null;
+        }
     </script>
 </body>
 </html>
