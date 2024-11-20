@@ -21,187 +21,288 @@
       integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
       crossorigin="anonymous"
     />
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        #quizOutputQuestions li {
+            background-color: transparent !important;
+        }
+        #quizOutputQuestions label {
+            color: #374151 !important; /* Dark gray, ensuring visibility */
+        }
+        #quizOutputQuestions input[type="radio"] {
+          border: 2px solid #0d6efd;
+        }
+        #quizOutputQuestions input[type="radio"]:checked {
+          border-color: #2563eb;
+          background-color: #2563eb;
+          background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3ccircle cx='8' cy='8' r='3'/%3e%3c/svg%3e");
+          background-position: center;
+          background-repeat: no-repeat;
+        }
+  </style>
+
+
     <title>Quiz Web App</title>
   </head>
-  <body>
-    <header>
-      <div class="user-info" style="display: flex; align-items: center;">
-          <div class="user-profile-icon" style="margin-right: 10px;">
-              <img src="{{ url_for('static', path='/lion.jpg') }}" alt="User Profile" style="width: 50px; height: 50px; border-radius: 50%;"/>
+
+  <body class="bg-gray-100">
+    <header class="bg-white shadow-sm border-bottom">
+      <div class="container-fluid px-4 py-3">
+          <div class="d-flex justify-content-between align-items-center">
+              <div class="d-flex align-items-center">
+                  <img 
+                      src="{{ url_for('static', path='/lion.jpg') }}" 
+                      alt="User Profile" 
+                      class="rounded-circle me-3" 
+                      style="width: 70px; height: 70px; object-fit: cover; border: 2px solid #0d6efd;"
+                  />
+                  <div>
+                      <h2 class="h5 mb-0 text-dark fw-semibold">
+                          Welcome, <span class="text-primary">{{ user_data.name }}</span>
+                      </h2>
+                  </div>
+              </div>
+              <div class="d-flex align-items-center gap-3">
+                  <button 
+                      id="homepageButton" 
+                      onclick="window.location.href = '/'" 
+                      class="btn btn-outline-primary d-flex align-items-center"
+                  >
+                      <i class="fa fa-home me-2"></i>Home
+                  </button>
+                  
+                  <button 
+                      id="analyticsButton" 
+                      onclick="window.location.href = '/analytics'" 
+                      class="btn btn-outline-success d-flex align-items-center"
+                  >
+                      <i class="fa fa-chart-line me-2"></i>Analytics
+                  </button>
+                  
+                  <button 
+                      type="button" 
+                      id="logoutButton" 
+                      onclick="Logout()" 
+                      class="btn btn-outline-danger d-flex align-items-center"
+                  >
+                      <i class="fa fa-sign-out-alt me-2"></i>Logout
+                  </button>
+              </div>
           </div>
-          <p style="font-size: 22px; font-weight: 600; margin: 0;">
-              Hello, <span id="username">{{user_data.name}}</span>
-          </p>
       </div>
-      <div class="user-actions">
-          <button id="homepageButton" onclick="window.location.href = '/'" style="border-radius: 12px; background-color: #17a2b8; color: white; border: none; padding: 10px 15px; margin-right: 10px; display: flex; align-items: center;">
-              <i class="fa fa-home" style="margin-right: 5px;"></i> Homepage
-          </button>
-          <button id="analyticsButton" onclick="window.location.href = '/analytics'" style="border-radius: 12px; background-color: #28a745; color: white; border: none; padding: 10px 15px; margin-right: 10px; display: flex; align-items: center;">
-              <i class="fa fa-chart-line" style="margin-right: 5px;"></i> Previous Analytics
-          </button>
-          <button type="button" id="logoutButton" onclick="Logout()" style="border-radius: 12px; background-color: #dc3545; color: white; border: none; padding: 10px 15px; display: flex; align-items: center;">
-            <i class="fa fa-sign-out-alt" style="margin-right: 5px;"></i> Logout
-          </button>
-      </div>
-    </header>
+  </header>
     
-    <form id="quizForm">
-      <label for="topic">Topic:</label>
-      <select id="topic" name="topic" required>
-        <option value="Linux">Linux</option>
-        <option value="Bash">Bash</option>
-        <option value="PHP">PHP</option>
-        <option value="Docker">Docker</option>
-        <option value="HTML">HTML</option>
-        <option value="MySQL">MySQL</option>
-        <option value="WordPress">WordPress</option>
-        <option value="Laravel">Laravel</option>
-        <option value="Kubernetes">Kubernetes</option>
-        <option value="JavaScript">JavaScript</option>
-        <option value="DevOps">DevOps</option>
-      </select>
+  <div class="container mx-auto max-w-xl px-4 py-8">
+      <form id="quizForm" class="bg-white p-6 md:p-10 rounded-2xl shadow-2xl border border-gray-100">
+          <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">Configure Your Quiz</h2>
 
-      <label for="difficulty">Difficulty:</label>
-      <select id="difficulty" name="difficulty">
-        <option value="Easy">Easy</option>
-        <option value="Medium">Medium</option>
-        <option value="Hard">Hard</option>
-      </select>
+          <div class="space-y-6">
+              <div>
+                  <label for="topic" class="block text-sm font-medium text-gray-700 mb-2">Select Topic</label>
+                  <div class="relative">
+                      <select 
+                          id="topic" 
+                          name="topic" 
+                          required 
+                          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none"
+                      >
+                          <option value="">Choose a Topic</option>
+                          <option value="Linux">Linux</option>
+                          <option value="Bash">Bash</option>
+                          <option value="PHP">PHP</option>
+                          <option value="Docker">Docker</option>
+                          <option value="HTML">HTML</option>
+                          <option value="MySQL">MySQL</option>
+                          <option value="WordPress">WordPress</option>
+                          <option value="Laravel">Laravel</option>
+                          <option value="Kubernetes">Kubernetes</option>
+                          <option value="JavaScript">JavaScript</option>
+                          <option value="DevOps">DevOps</option>
+                      </select>
+                      <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-500">
+                          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                              <path fill-rule="evenodd" d="M10 3a1 1 0 01.707.293l3 3a1 1 0 01-1.414 1.414L10 5.414 7.707 7.707a1 1 0 01-1.414-1.414l3-3A1 1 0 0110 3zm-3.707 9.293a1 1 0 011.414 0L10 14.586l2.293-2.293a1 1 0 011.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
+                          </svg>
+                      </div>
+                  </div>
+              </div>
 
-      <label for="numQuestions">Number of Questions:</label>
-      <input
-        type="number"
-        id="numQuestions"
-        name="numQuestions"
-        min="1"
-        max="20"
-        required
-      />
+              <div>
+                  <label for="difficulty" class="block text-sm font-medium text-gray-700 mb-2">Difficulty Level</label>
+                  <select 
+                      id="difficulty" 
+                      name="difficulty" 
+                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                      <option value="Easy">Easy</option>
+                      <option value="Medium">Medium</option>
+                      <option value="Hard">Hard</option>
+                  </select>
+              </div>
 
-      <button
-        type="button"
-        id="fetchQuiz"
-        style="
-          border-radius: 15px;
-          padding: 10px 20px;
-          border: 2px solid #007bff;
-          background-color: #007bff;
-          color: #fff;
-          font-size: 16px;
-          font-weight: bold;
-          cursor: pointer;
-          transition: background-color 0.3s, border-color 0.3s;
-        "
-        onmouseover="this.style.backgroundColor='#0056b3'; this.style.borderColor='#0056b3';"
-        onmouseout="this.style.backgroundColor='#007bff'; this.style.borderColor='#007bff';"
-      >
-        <i class="fas fa-play-circle"></i> Start Quiz
+              <div>
+                  <label for="numQuestions" class="block text-sm font-medium text-gray-700 mb-2">Number of Questions</label>
+                  <input
+                      type="number"
+                      id="numQuestions"
+                      name="numQuestions"
+                      min="1"
+                      max="20"
+                      required
+                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      placeholder="Enter number of questions (1-20)"
+                  />
+              </div>
+
+              <button
+                  type="button"
+                  id="fetchQuiz"
+                  class="w-full bg-blue-600 text-white py-3.5 rounded-lg hover:bg-blue-700 transition duration-300 ease-in-out transform hover:-translate-y-1 shadow-lg flex items-center justify-center space-x-2"
+              >
+                  <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 1.414L10.586 9H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z" clip-rule="evenodd" />
+                  </svg>
+                  <span>Start Quiz</span>
+              </button>
+          </div>
+      </form>
+  </div>
+
+    <!-- Quiz Output Section -->
+<div id="quizOutput" class="max-w-4xl mx-auto p-6 bg-white rounded-xl shadow-lg mt-8">
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 p-4 bg-gray-50 rounded-lg">
+      <div class="flex items-center space-x-2 text-gray-700">
+          <i class="fas fa-gamepad text-blue-500"></i>
+          <span class="font-medium">Quiz Topic:</span>
+          <span id="quizTopic" class="text-blue-600 font-semibold">Tech</span>
+      </div>
+      <div class="flex items-center space-x-2 text-gray-700">
+          <i class="fas fa-tachometer-alt text-green-500"></i>
+          <span class="font-medium">Difficulty:</span>
+          <span id="quizDifficulty" class="text-green-600 font-semibold">Level</span>
+      </div>
+      <div class="flex items-center space-x-2 text-gray-700">
+          <i class="fas fa-clock text-orange-500"></i>
+          <span id="quizTimer" class="font-semibold">Timer: 00:00</span>
+      </div>
+  </div>
+
+  <div class="quiz-container">
+      <div class="question-container">
+          <div id="quizOutputQuestions">
+              <!-- Questions will be inserted here -->
+          </div>
+      </div>
+  </div>
+
+  <div id="buttonsContainer" class="flex flex-wrap gap-3 justify-center">
+      <button id="resetQuiz" class="btn-secondary bg-gray-600 hover:bg-gray-700">
+          <i class="fas fa-undo mr-2"></i>Reset
       </button>
+      <button id="submitQuiz" class="btn-primary bg-blue-600 hover:bg-blue-700">
+        <i class="fas fa-check mr-2"></i>Submit Quiz
+    </button>
+  </div>
+</div>
 
-    </form>
+<!-- Results Section -->
+<div id="results" class="max-w-4xl mx-auto p-8 bg-gradient-to-br from-blue-50 to-white rounded-xl shadow-2xl mt-8">
+  <h1 class="text-4xl font-extrabold text-gray-800 text-center mb-10">
+    🎉 Your Quiz Results!
+  </h1>
 
-    <div id="quizOutput">
-      <div class="quiz-header">
-        <i class="fas fa-gamepad"></i> Quiz Topic:
-        <span id="quizTopic"> Tech </span>
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+    <!-- Quiz Topic Card -->
+    <div class="flex items-center bg-white shadow-lg rounded-lg p-6">
+      <div class="flex-shrink-0">
+        <i class="fas fa-book-open text-blue-600 text-3xl"></i>
       </div>
-      <div class="difficultyLevel">
-        <i class="fas fa-tachometer-alt"></i> Difficulty:
-        <span id="quizDifficulty"> Level </span>
-      </div>
-      <div class="quiz-timer">
-        <i class="fas fa-clock"></i> <span id="quizTimer">Timer: 00:00</span>
-      </div>
-      <div id="quizOutputQuestions"></div>
-      <div id="buttonsContainer">
-        <button id="submitQuiz">
-          <i class="fas fa-check"></i> Submit Quiz
-        </button>
-        <button id="resetQuiz"><i class="fas fa-undo"></i> Reset</button>
-        <button id="goToHomepage" onclick="window.location.href = '/'">
-          <i class="fas fa-home"></i> Homepage
-        </button>
+      <div class="ml-4">
+        <h2 class="text-lg font-bold text-gray-800">Quiz Topic</h2>
+        <p id="quizTopicTb" class="text-gray-600 text-md mt-1">Not available</p>
       </div>
     </div>
 
-    <div id="results" style="max-width: 800px; margin: auto; padding: 20px; font-family: Arial, sans-serif;">
-      <h1 style="color: #333; border-bottom: 2px solid #ddd; padding-bottom: 10px; margin-bottom: 20px;">Results</h1>
-      
-      <table style="width: 100%; border-collapse: collapse; color: #333;">
-          <tbody>
-              <tr>
-                  <td style="padding: 12px; border-bottom: 1px solid #ddd; font-weight: bold;">Quiz Topic</td>
-                  <td id="quizTopicTb" style="padding: 12px; border-bottom: 1px solid #ddd;">Quiz Topic Value</td>
-              </tr>
-              <tr>
-                  <td style="padding: 12px; border-bottom: 1px solid #ddd; font-weight: bold;">Difficulty Level</td>
-                  <td id="quizDifficultyTb" style="padding: 12px; border-bottom: 1px solid #ddd;"></td>
-              </tr>
-              <tr>
-                  <td style="padding: 12px; border-bottom: 1px solid #ddd; font-weight: bold;">Time Taken</td>
-                  <td id="timeTaken" style="padding: 12px; border-bottom: 1px solid #ddd;"></td>
-              </tr>
-              <tr>
-                  <td style="padding: 12px; border-bottom: 1px solid #ddd; font-weight: bold;">Score</td>
-                  <td id="resultsText" style="padding: 12px; border-bottom: 1px solid #ddd;"></td>
-              </tr>
-              <tr>
-                  <td style="padding: 12px; font-weight: bold;">Accuracy</td>
-                  <td id="resultsAccuracy" style="padding: 12px;"></td>
-              </tr>
-          </tbody>
-      </table>
-      
-      <div style="margin: 20px 0; text-align: center;">
-          <button class="button" id="analyzeAnswers" style="
-              background-color: #4285F4;
-              border: 5px solid #ddd;
-              color: white;
-              padding: 10px 20px;
-              border-radius: 15px;
-              cursor: pointer;
-              font-size: 16px;
-              font-weight: bold;
-              transition: background-color 0.3s, border-color 0.3s;
-          ">
-              <i class="fas fa-tasks"></i> Analyze Answers
-          </button>
+    <!-- Difficulty Level Card -->
+    <div class="flex items-center bg-white shadow-lg rounded-lg p-6">
+      <div class="flex-shrink-0">
+        <i class="fas fa-signal text-purple-600 text-3xl"></i>
       </div>
-  
-      <div style="margin-bottom: 20px; text-align: center;">
-          <p style="font-size: 16px; color: #666;">Please analyze your answers before submitting the response.</p>
+      <div class="ml-4">
+        <h2 class="text-lg font-bold text-gray-800">Difficulty Level</h2>
+        <p id="quizDifficultyTb" class="text-gray-600 text-md mt-1">Not available</p>
       </div>
-  
-      <div style="text-align: center;">
-          <button
-              class="button"
-              id="submitAnswers"
-              onclick="submitData('{{ user_data.email }}')"
-              style="
-                  background-color: #4caf50;
-                  color: white;
-                  padding: 12px 24px;
-                  border: none;
-                  border-radius: 15px;
-                  cursor: pointer;
-                  font-size: 16px;
-                  font-weight: bold;
-                  transition: background-color 0.3s;
-              "
-          >
-              <i class="fas fa-check-circle"></i> Submit Result
-          </button>
-      </div>
-  
-      <div class="container" style="margin-top: 40px;">
-          <h2 style="color: #333; border-bottom: 2px solid #ddd; padding-bottom: 10px;">Previous Stats</h2>
-      </div>
-  </div>
-  
+    </div>
 
-    <script src="{{ url_for('static', path='/script.js')}}"></script>
+    <!-- Time Taken Card -->
+    <div class="flex items-center bg-white shadow-lg rounded-lg p-6">
+      <div class="flex-shrink-0">
+        <i class="fas fa-clock text-green-600 text-3xl"></i>
+      </div>
+      <div class="ml-4">
+        <h2 class="text-lg font-bold text-gray-800">Time Taken</h2>
+        <p id="timeTaken" class="text-gray-600 text-md mt-1">Not available</p>
+      </div>
+    </div>
+
+    <!-- Score Card -->
+    <div class="flex items-center bg-white shadow-lg rounded-lg p-6">
+      <div class="flex-shrink-0">
+        <i class="fas fa-trophy text-yellow-500 text-3xl"></i>
+      </div>
+      <div class="ml-4">
+        <h2 class="text-lg font-bold text-gray-800">Score</h2>
+        <p id="resultsText" class="text-gray-600 text-md mt-1">Not available</p>
+      </div>
+    </div>
+
+    <!-- Accuracy Card -->
+    <div class="flex items-center bg-white shadow-lg rounded-lg p-6 col-span-full sm:col-span-2">
+      <div class="flex-shrink-0">
+        <i class="fas fa-bullseye text-red-500 text-3xl"></i>
+      </div>
+      <div class="ml-4">
+        <h2 class="text-lg font-bold text-gray-800">Accuracy</h2>
+        <p id="resultsAccuracy" class="text-gray-600 text-md mt-1">Not available</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex flex-col items-center gap-8 mt-10">
+    <button
+      id="analyzeAnswers"
+      class="px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-lg rounded-lg shadow-md transition focus:outline-none focus:ring-4 focus:ring-blue-300">
+      <i class="fas fa-tasks mr-2"></i>Analyze Answers
+    </button>
+
+    <p class="text-gray-500 text-sm italic text-center">
+      Please analyze your answers before submitting the response.
+    </p>
+
+    <button
+      id="submitAnswers"
+      onclick="submitData('{{ user_data.email }}')"
+      class="w-52 px-4 py-3 bg-green-600 hover:bg-green-700 text-white font-semibold text-lg rounded-lg shadow-md transition focus:outline-none focus:ring-4 focus:ring-green-300">
+      <i class="fas fa-check-circle mr-2"></i>Submit Result
+    </button>
+  </div>
+</div>
+
+</div>
+  
+<script src="{{ url_for('static', path='/script.js')}}"></script>
     <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        document
+          .getElementById("analyzeAnswers")
+          .addEventListener("click", function () {
+            document.getElementById("quizOutput").style.display = "block";
+            document.getElementById("results").style.display = "none";
+            document.getElementById("submitQuiz").style.display = "block";
+            document.getElementById("resetQuiz").style.display = "none";
+          });
+      });
       function Logout() {
         const accessToken = getAccessTokenFromCookie();
         fetch("/api/auth/logout", {
@@ -307,3 +408,5 @@
     ></script>
   </body>
 </html>
+
+
