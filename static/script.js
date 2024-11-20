@@ -1,4 +1,4 @@
-const apiKey = "iQDqOadaA3bsTW1Z6TXLYjJ0vLWOVLc1H4eQNLag";
+const apiKey = process.env.QUIZ_API_KEY;
 
 let quizData = [];
 
