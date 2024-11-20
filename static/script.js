@@ -1,4 +1,4 @@
-const apiKey = "iQDqOadaA3bsTW1Z6TXLYjJ0vLWOVLc1H4eQNLag";
+const apiKey = process.env.QUIZ_API_KEY;
 
 let quizData = [];
 
@@ -25,68 +25,73 @@ document.getElementById("fetchQuiz").addEventListener("click", function () {
   goToHomepage.style.display = "none"; // Show the homepage button
 });
 
-// Function to display quiz questions and answer options
 function displayQuizQuestions() {
   const quizOutput = document.getElementById("quizOutput");
   const quizOutputQuestions = document.getElementById("quizOutputQuestions");
   const topicName = document.getElementById("topic").value;
   const difficulty = document.getElementById("difficulty").value;
-  // quizOutput.innerHTML = ''; // Clear any previous content
 
-  // Assuming you have the topic in a variable called 'topic'
   document.getElementById("quizTopic").textContent = topicName;
   document.getElementById("quizDifficulty").textContent = difficulty;
 
   startTimer();
 
   quizData.forEach((questionData, index) => {
-    const question = questionData.question;
+      const questionDiv = document.createElement("div");
+      questionDiv.className = "bg-white rounded-lg shadow-md p-6 mb-6";
 
-    // Filter out null options and keep only non-null options
-    const answerOptions = Object.values(questionData.answers).filter(
-      (answer) => answer !== null
-    );
+      // Question Header
+      const questionHeading = document.createElement("h2");
+      questionHeading.className = "text-lg font-semibold text-gray-800 mb-4";
+      questionHeading.textContent = `Question ${index + 1}: ${questionData.question}`;
 
-    const questionDiv = document.createElement("div");
-    questionDiv.className = "question";
+      // Options Container
+      const answerList = document.createElement("div");
+      answerList.className = "space-y-3";
 
-    const questionHeading = document.createElement("h2");
-    questionHeading.textContent = `Question ${index + 1}: ${question}`;
+      // Filter and display options
+      const answerOptions = Object.values(questionData.answers).filter(
+          (answer) => answer !== null
+      );
 
-    const answerList = document.createElement("ul");
-
-    answerOptions.forEach((answer, answerIndex) => {
-      const answerItem = document.createElement("li");
-      const answerRadio = document.createElement("input");
-      answerRadio.type = "radio";
-      answerRadio.name = `question_${index}`;
-      answerRadio.value = answer;
-
-      // Add a data attribute to store the correct answer
-      answerRadio.dataset.correct =
-        questionData.correct_answers[
-          `answer_${String.fromCharCode(97 + answerIndex)}_correct`
+      answerOptions.forEach((answer, answerIndex) => {
+        const optionDiv = document.createElement("div");
+        optionDiv.className = "relative mb-3";
+    
+        const optionLabel = document.createElement("label");
+        optionLabel.className = "option-label flex items-center p-4 rounded-lg cursor-pointer w-full";
+    
+        const radioWrapper = document.createElement("div");
+        radioWrapper.className = "flex-shrink-0 mr-4";
+    
+        const radio = document.createElement("input");
+        radio.type = "radio";
+        radio.name = `question_${index}`;
+        radio.value = answer;
+        radio.className = "form-radio h-5 w-5 text-blue-600 border-gray-300 focus:ring-blue-500";
+        radio.dataset.correct = questionData.correctanswers[
+            `answer${String.fromCharCode(97 + answerIndex)}_correct`
         ] === "true";
+    
+        const optionText = document.createElement("span");
+        optionText.className = "option-text text-base flex-grow"; // Added option-text class
+        optionText.textContent = answer;
+    
+        radioWrapper.appendChild(radio);
+        optionLabel.appendChild(radioWrapper);
+        optionLabel.appendChild(optionText);
+        optionDiv.appendChild(optionLabel);
+        answerList.appendChild(optionDiv);
+      });
 
-      const answerLabel = document.createElement("label");
-      answerLabel.textContent = answer;
-
-      answerItem.appendChild(answerRadio);
-      answerItem.appendChild(answerLabel);
-      answerList.appendChild(answerItem);
-    });
-
-    questionDiv.appendChild(questionHeading);
-    questionDiv.appendChild(answerList);
-
-    quizOutputQuestions.appendChild(questionDiv);
+      questionDiv.appendChild(questionHeading);
+      questionDiv.appendChild(answerList);
+      quizOutputQuestions.appendChild(questionDiv);
   });
 
-  // Hide the form after fetching the quiz
   document.getElementById("quizForm").style.display = "none";
-  // Display the Submit Quiz and Homepage buttons
   document.getElementById("submitQuiz").style.display = "block";
-  document.getElementById("goToHomepage").style.display = "block";
+  document.getElementById("goToHomepage").style.display = "none";
 }
 
 // Function to go back to the quiz questions to analzye answers
@@ -95,9 +100,9 @@ document
   .addEventListener("click", function () {
     document.getElementById("quizOutput").style.display = "block";
     document.getElementById("results").style.display = "none";
-    document.getElementById("goToHomepage").style.display = "block";
+    document.getElementById("goToHomepage").style.display = "none";
     document.getElementById("submitQuiz").style.display = "block";
-    document.getElementById("resetQuiz").style.display = "block";
+    document.getElementById("resetQuiz").style.display = "none";
   });
 
 // Event listener for the Reset button

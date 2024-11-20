@@ -69,19 +69,6 @@ async def read_item(request: Request):
 async def read_item(request: Request):
     return templates.TemplateResponse("signup.html", {"request": request})
 
-# @app.put("/users/{user_id}")
-# async def update_past_quiz(user_id: str, request_data: UpdatePastQuizRequest):
-#     if user_id not in users_data:
-#         raise HTTPException(status_code=404, detail="User not found")
-
-#     # past_quiz_data = request_data.dict()
-
-#     # Update user's pastQuiz data
-#     users_data[user_id]["pastQuiz"].append(past_quiz_data)
-#     users_data[user_id]["updated_at"] = datetime.utcnow()
-
-#     return {"message": "Past quiz updated successfully"}
-
 @app.put("/update-users-data")
 async def update_user(authorization: str = Header(...), data: dict = {}):
     user_data = await get_user_data(authorization)
@@ -92,7 +79,6 @@ async def update_user(authorization: str = Header(...), data: dict = {}):
     db = client.get_database(settings.MONGO_INITDB_DATABASE)
 
     user_data['user']['pastQuiz'].append(data)
-    # user_data['user']['updated_at'] = datetime.datetime.utcnow()
     id = user_data['user']['id']   
     query = { "_id": ObjectId(id) }
     newvalues = { "$push": { "pastQuiz": data } }
@@ -106,13 +92,6 @@ async def update_user(authorization: str = Header(...), data: dict = {}):
 async def analytics(request: Request, access_token: str = Cookie(None)):
     try:
         user_data = await get_user_data(access_token)
-        # Print the entire user_data
-        # print("User Data:", user_data)
-        # print("User Data - User:", user_data['user'])
-        # if user_data['user']['pastQuiz']:
-        #     print("First Quiz Entry:", user_data['user']['pastQuiz'][0])
-        # else:
-        #     print("No Quiz Data Available")
         return templates.TemplateResponse("analytics.html", {"request": request, "user_data": user_data['user']})
     except Exception as e:
         print("Error:", e)
